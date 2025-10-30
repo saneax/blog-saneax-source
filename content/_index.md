@@ -17,3 +17,6 @@ My name is Sanjay Upadhyay (AKA saneax) and I'm using this site to explore:
 ---
 
 *Feel free to look around at my posts below.*
+
+{{< comments >}}
+

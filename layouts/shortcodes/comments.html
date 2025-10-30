@@ -1,0 +1,20 @@
+<button id="load-comments" style="margin-top:2rem;padding:0.6rem 1rem;">💬 Show Comments</button>
+<div id="comments-container"></div>
+<script>
+  document.getElementById("load-comments").addEventListener("click", function() {
+    this.remove();
+    let d = document.createElement("script");
+    d.src = "https://giscus.app/client.js";
+    d.setAttribute("data-repo", "saneax/blog-saneax-source");
+    d.setAttribute("data-repo-id", "R_kgDOQMGQ5A");
+    d.setAttribute("data-category", "General");
+    d.setAttribute("data-category-id", "DIC_kwDOQMGQ5M4CxQSI");
+    d.setAttribute("data-mapping", "pathname");
+    d.setAttribute("data-theme", "preferred_color_scheme");
+    d.setAttribute("data-lang", "en");
+    d.setAttribute("crossorigin", "anonymous");
+    d.async = true;
+    document.getElementById("comments-container").appendChild(d);
+  });
+</script>
+

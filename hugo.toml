@@ -38,9 +38,13 @@ enableRobotsTXT = true
   url  = "/projects/"
   weight = 20
 [[menu.main]]
+  name = "Articles"
+  url  = "/articles/"
+  weight = 30
+[[menu.main]]
   name = "About"
   url  = "/about/"
-  weight = 30
+  weight = 40
 
 [markup]
   [markup.highlight]
@@ -50,3 +54,17 @@ enableRobotsTXT = true
 
 [minify]
   minifyOutput = true
+
+[params.giscus]
+  repo = "saneax/blog-saneax-source"
+  repoId = "R_kgDOQMGQ5A"
+  category = "General"
+  categoryId = "DIC_kwDOQMGQ5M4CxQSI"
+  mapping = "pathname"
+  data-strict = "0"
+  data-reactions-enabled = "1"
+  emitMetadata = "0"
+  inputPosition = "bottom"
+  theme = "preferred_color_scheme"
+  lang = "en"
+  crossorigin = "anonymous"

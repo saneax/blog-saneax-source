@@ -21,3 +21,4 @@ This study documents how to design and deploy a **multi-region OpenStack environ
 
 **Outcome:** An end-to-end reproducible environment for AI infrastructure testing using open-source tools.
 
+{{< comments >}}
