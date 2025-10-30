@@ -1,0 +1,52 @@
+baseURL = 'https://blog.saneax.in/'
+# languageCode = 'en-us'
+title = 'blog of Sanjay Upadhyay (AKA saneax)'
+# logo = '/images/logo.png'
+theme = "PaperMod"
+languageCode = "en-us"
+# paginate = 10
+enableRobotsTXT = true
+
+[params]
+  env = "production"
+  defaultTheme = "auto"          # dark/light auto
+  description = "Engineering notes on OpenStack, K8s & AI."
+  author = "Sanjay Upadhyay"
+  ShowReadingTime = true
+  ShowShareButtons = true
+  ShowPostNavLinks = true
+  ShowBreadCrumbs = true
+  ShowRssButtonInSectionTermList = true
+  ShowCodeCopyButtons = true
+  images = ["/images/logo.png"]  # social preview
+
+[params.profileMode]
+  enabled = true
+  title = "Hi, I'm Sanjay"
+  subtitle = "Cloud • Kubernetes • AI"
+  imageUrl = "/images/logo.png"
+  imageTitle = "Sanjay"
+  imageWidth = 160
+  imageHeight = 160
+
+[[menu.main]]
+  name = "Blog"
+  url  = "/"
+  weight = 10
+[[menu.main]]
+  name = "Projects"
+  url  = "/projects/"
+  weight = 20
+[[menu.main]]
+  name = "About"
+  url  = "/about/"
+  weight = 30
+
+[markup]
+  [markup.highlight]
+    noClasses = false             # use Chroma for code styling
+  [markup.goldmark.renderer]
+    unsafe = true                 # allow HTML in Markdown
+
+[minify]
+  minifyOutput = true
