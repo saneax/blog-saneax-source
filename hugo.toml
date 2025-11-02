@@ -1,6 +1,6 @@
 baseURL = 'https://blog.saneax.in/'
 # languageCode = 'en-us'
-title = 'blog of Sanjay Upadhyay (AKA saneax)'
+title = 'Sanjay Upadhyay'
 # logo = '/images/logo.png'
 theme = "PaperMod"
 languageCode = "en-us"
