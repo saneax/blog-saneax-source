@@ -131,7 +131,7 @@ To prevent interface names (eth1, eth2) from swapping on reboot, we bound them t
 #### Primary WAN (wan0) - Static IP
 
     nmcli connection add type ethernet con-name wan0-wan-static ifname wan0 \
-      ipv4.method manual ipv4.addresses 10.10.72.195/26 ipv4.gateway 10.10.72.193 \
+      ipv4.method manual ipv4.addresses 172.29.72.195/26 ipv4.gateway 172.29.72.193 \
       ipv4.dns "8.8.8.8 4.2.2.1" ipv4.route-metric 100
 
 #### Backup WAN (wan1) - Wi-Fi DHCP
@@ -145,7 +145,7 @@ _Note: Regulatory domain set via `sudo iw reg set IN` to enable 5GHz._
 #### LAN Gateway (lan0) - Static IP
 
     nmcli connection add type ethernet con-name lan0-lan ifname lan0 \
-      ipv4.method manual ipv4.addresses 192.168.10.1/24 ipv4.never-default yes
+      ipv4.method manual ipv4.addresses 192.168.100.1/24 ipv4.never-default yes
 
 * * *
 
