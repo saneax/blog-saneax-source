@@ -290,33 +290,49 @@ Hosted in `~/nextcloud-docker/` using Docker Compose.
 ~/nextcloud-docker/docker-compose.yml
 
     version: '3.7'
-    services:
-      db:
-        image: mariadb:10.6
-        restart: always
-        command: --transaction-isolation=READ-COMMITTED --binlog-format=ROW
-        volumes:
-          - ./db:/var/lib/mysql
-          - ./init-db:/docker-entrypoint-initdb.d # Custom SQL Fix
-        environment:
-          MYSQL_ROOT_PASSWORD: ROOT_PASSWORD
-          MYSQL_DATABASE: nextcloud
-          # Removed MYSQL_USER/PASSWORD to prevent conflict with init.sql
+    version: '3.7'                                                                                                                                                                                                      
+                                                                                                                                                                                                                        
+    services:                                                                                                                                                                                                           
+      db:                                                                                                                                                                                                               
+        networks:                                                                                                                                                                                                       
+          - nextcloud_net                                                                                                                                                                                               
+        image: mariadb                                                                                                                                                                                                  
+        restart: always                                                                                                                                                                                                 
+        command: --transaction-isolation=READ-COMMITTED --binlog-format=ROW                                                                                                                                             
+        volumes:                                                                                                                                                                                                        
+          - ./db:/var/lib/mysql                                                                                                                                                                                         
+          - ./init-db:/docker-entrypoint-initdb.d                                                                                                                                                                       
+        environment:                                                                                                                                                                                                    
+          MYSQL_ROOT_PASSWORD: XXXXChangemeXXXX                                                                                                                                                                       
     
       app:
+        networks:
+          - nextcloud_net
         image: nextcloud
         restart: always
         ports:
-          - 8081:80
+          - 8081:80 # Nextcloud will listen locally on 8081
+        links:
+          - db
         volumes:
-          - /mnt/cloudstorage/nextcloud_data:/var/www/html/data
+          - /mnt/cloudstorage/nextcloud_data:/var/www/html/data # Mount your RAID array data path here
           - ./config:/var/www/html/config
         environment:
           MYSQL_HOST: db
           MYSQL_DATABASE: nextcloud
-          MYSQL_USER: nextclouduser # Matches init.sql
-          MYSQL_PASSWORD: YOUR_SECURE_PASSWORD
-          NEXTCLOUD_TRUSTED_DOMAINS: "cloud.yourdomain.com"
+          MYSQL_USER: nextcloud
+          MYSQL_PASSWORD: XXXXChangemeXXXX
+          NEXTCLOUD_TRUSTED_DOMAINS: "sanstore.saneax.in" 
+          PHP_MEMORY_LIMIT: 1024M
+          PHP_UPLOAD_LIMIT: 10G
+        depends_on:
+          - db
+    
+    networks:
+      nextcloud_net:
+        driver: bridge
+        driver_opts:
+          com.docker.network.bridge.name: br-nextcloud
 
 ### 5.3 Cloudflare Tunnel
 
@@ -331,6 +347,13 @@ Exposes the service securely without opening ports.
 
 6\. Maintenance & Troubleshooting
 ---------------------------------
+
+### The "Double Restart" Recovery
+
+If you must restart Docker manually, it will wipe the LAN router rules. To restore full functionality, you must follow this sequence:
+
+1.  `sudo systemctl restart nftables` (Restores Router Rules, breaks Docker DNS)
+2.  `sudo systemctl restart docker` (Restores Docker Rules on top of Router Rules)
 
 ### System Recovery
 
@@ -353,5 +376,47 @@ Exposes the service securely without opening ports.
 -   **Firewall:** `sudo systemctl status nftables`
 -   **DHCP:** `journalctl -u dnsmasq -f`
 -   **Docker Database:** `docker logs nextcloud-docker_db_1`
+-   **Check Docker Logs:** `docker logs nextcloud-docker_app_1`
 
+7\. Service Lifecycle & Management
+----------------------------------
+
+Use the following systemctl commands to enable and start all required services in the correct order.
+
+### 7.1 Enable Services (Boot Persistence)
+
+    # 1. IP Forwarding (Sysctl)
+    # (Auto-loaded via /etc/sysctl.d/99-ip-forward.conf)
+    
+    # 2. Firewall (Loads rules first)
+    sudo systemctl enable nftables
+    
+    # 3. Docker (Starts second, adds its own rules)
+    sudo systemctl enable docker
+    
+    # 4. DHCP (Wait for Network Interface lan0)
+    sudo systemctl enable dnsmasq
+    
+    # 5. Content Filter (AdGuard Home)
+    sudo systemctl enable AdGuardHome
+    
+    # 6. RAID Monitoring
+    sudo systemctl enable mdadm
+    
+    # 7. Cloud Tunnel
+    sudo systemctl enable cloudflared
+
+### 7.2 Start Services (Manual Sequence)
+
+    # 1. Start Firewall
+    sudo systemctl start nftables
+    
+    # 2. Start Docker (This layers Docker NAT on top of nftables)
+    sudo systemctl start docker
+    
+    # 3. Start DHCP
+    sudo systemctl start dnsmasq
+    
+    # 4. Start AdGuard
+    sudo systemctl start AdGuardHome
 
