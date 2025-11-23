@@ -9,8 +9,8 @@ description: "Comprehensive documentation for setting up a Raspberry Pi 4 as a m
 weight: 10
 ---
 
-Project Pi03: Transparent Router, Content Filter & Personal Cloud
-=================================================================
+**System Role:** A high-availability Raspberry Pi 4 hosting a redundant RAID 1 storage array, acting as a transparent router for a LAN subnet, enforcing DNS filtering via AdGuard Home, and serving a Nextcloud instance externally via Cloudflare Tunnels.
+
 
 **Host:** Raspberry Pi 4 Model B (4GB RAM)
 
@@ -22,7 +22,7 @@ Project Pi03: Transparent Router, Content Filter & Personal Cloud
 
 **Date:** November 2025
 
-1\. System Architecture & Network Design
+System Architecture & Network Design
 ----------------------------------------
 
 This system operates as a transparent router for a LAN subnet while hosting secure personal cloud services accessible from the internet.
@@ -38,60 +38,141 @@ This system operates as a transparent router for a LAN subnet while hosting secu
 | **docker0** | `docker0` | Bridge | Docker Default | `172.17.0.1/16` | N/A |
 | **br-xx** | `br-xxxx` | Bridge | Compose Network | `172.x.0.1/16` | N/A |
 
-### Traffic Flow
+- - -
 
-1.  **LAN Clients** (`192.168.10.x`) → **Pi03 Gateway** (`192.168.10.1`).
-2.  **DNS Redirection:** All UDP/TCP 53 traffic is transparently redirected via `nftables` to **AdGuard Home** (`192.168.10.1:53`).
-3.  **AdGuard Home:** Filters content → Resolves via Upstream (8.8.8.8) using WAN failover.
-4.  **Internet Access:** Traffic is NAT'd (Masqueraded) out via `wan0` (Primary) or `wan1` (Backup).
+1\. Storage Layer: RAID 1 Configuration
+---------------------------------------
+
+The foundation of the system is a mirrored RAID 1 array using two external USB drives. This setup provides redundancy against single-drive failure.
+
+### 1.1 Partitioning (gdisk)
+
+The disks were partitioned with type code `fd00` (Linux RAID) to utilize the entire available space.
+
+    # Install tools
+    sudo apt update && sudo apt install mdadm gdisk
+    
+    # Partitioning (Repeat for both /dev/sda and /dev/sdb)
+    sudo gdisk /dev/sda
+    # Command sequence: 
+    # n (new), 1 (partition number), enter (default start), enter (default end), fd00 (type), w (write)
+
+### 1.2 Array Creation
+
+Creating the MDADM array mirroring `/dev/sda1` and `/dev/sdb1`.
+
+    sudo mdadm --create /dev/md0 --level=1 --raid-devices=2 /dev/sda1 /dev/sdb1
+
+### 1.3 Filesystem & Mounting
+
+The array is formatted as ext4 and mounted persistently.
+
+    # Format
+    sudo mkfs.ext4 -F /dev/md0
+    
+    # Create Mount Point
+    sudo mkdir -p /mnt/cloudstorage
+    
+    # Get UUID for fstab
+    sudo blkid /dev/md0
+
+/etc/fstab
+
+    # Add the following line (Replace UUID):
+    UUID=<YOUR_RAID_UUID> /mnt/cloudstorage ext4 defaults,nofail 0 2
+
+### 1.4 Monitoring
+
+Configured email alerts for disk failure events.
+
+/etc/mdadm/mdadm.conf
+
+    MAILADDR your_email@example.com
+    MAILFROM pi03-raid-monitor
+
+    # Enable monitoring service
+    sudo systemctl enable mdadm.service
+    sudo systemctl start mdadm.service
 
 * * *
 
-2\. Network Configuration (NetworkManager & Udev)
--------------------------------------------------
+2\. Network Layer: Physical & Logical
+-------------------------------------
 
-### A. Persistent Naming Rules (Udev)
+This section covers the complex USB timing fixes and persistent naming required to make a Raspberry Pi a stable multi-NIC router.
 
-_File:_ `/etc/udev/rules.d/70-persistent-net.rules`
+### 2.1 Hardware Timing Fix (The "USB Race Condition")
 
-    # Rule 1: Static WAN Interface (Physical Path)
+**Critical Historical Context:** The external USB NIC (wan0) failed to initialize before NetworkManager attempted to configure it during boot. We implemented a `udev` rule to force a 10-second delay and a re-apply trigger.
+
+/etc/udev/rules.d/70-net-delay.rules
+
+    # Force a 10-second delay for specific USB NIC hardware (wan0)
+    # Replace ATTRS{devpath} with the stable physical USB path (e.g., 1.1)
+    SUBSYSTEM=="net", ACTION=="add", ATTRS{devpath}=="1.1", NAME="wan0", RUN+="/bin/sh -c 'sleep 10 > /dev/null && /usr/bin/nmcli device reapply wan0'"
+
+### 2.2 Persistent Interface Naming
+
+To prevent interface names (eth1, eth2) from swapping on reboot, we bound them to physical paths.
+
+/etc/udev/rules.d/70-persistent-net.rules
+
+    # Static WAN (USB NIC) - Locked to USB Port Path 1.1
     SUBSYSTEM=="net", ACTION=="add", ATTRS{devpath}=="1.1", NAME="wan0"
     
-    # Rule 2: LAN Interface (Physical Path)
+    # LAN Gateway (USB NIC) - Locked to USB Port Path 2.4
     SUBSYSTEM=="net", ACTION=="add", ATTRS{devpath}=="2.4", NAME="lan0"
     
-    # Rule 3: Backup WAN (Internal Wi-Fi MAC Address)
-    # Replace with your actual MAC address
-    SUBSYSTEM=="net", ACTION=="add", ATTR{address}=="XX:XX:XX:XX:XX:XX", NAME="wan1"
+    # Backup WAN (Internal Wi-Fi) - Locked to MAC Address
+    SUBSYSTEM=="net", ACTION=="add", ATTR{address}=="dc:a6:32:xx:xx:xx", NAME="wan1"
 
-### B. Connection Profiles (nmcli)
+### 2.3 NetworkManager Profiles (Multi-WAN)
 
-#### 1\. Primary WAN (Static)
+#### Primary WAN (wan0) - Static IP
 
     nmcli connection add type ethernet con-name wan0-wan-static ifname wan0 \
-      ipv4.method manual ipv4.addresses <WAN0_STATIC_IP> ipv4.gateway <WAN0_GATEWAY> \
+      ipv4.method manual ipv4.addresses 10.10.72.195/26 ipv4.gateway 10.10.72.193 \
       ipv4.dns "8.8.8.8 4.2.2.1" ipv4.route-metric 100
 
-#### 2\. Backup WAN (Wi-Fi DHCP)
+#### Backup WAN (wan1) - Wi-Fi DHCP
 
-    # Note: Requires `iw reg set <COUNTRY>` to see 5GHz networks.
+_Note: Regulatory domain set via `sudo iw reg set IN` to enable 5GHz._
+
     nmcli connection add type wifi con-name wan1-wifi-dhcp ifname wan1 \
-      ssid "<YOUR_SSID>" wifi-sec.key-mgmt wpa-psk wifi-sec.psk "<YOUR_WIFI_PASSWORD>" \
+      ssid "SSID_NAME" wifi-sec.key-mgmt wpa-psk wifi-sec.psk "PASSWORD" \
       ipv4.method auto ipv4.route-metric 200 connection.interface-name wan1
 
-#### 3\. LAN Gateway (Static)
+#### LAN Gateway (lan0) - Static IP
 
     nmcli connection add type ethernet con-name lan0-lan ifname lan0 \
       ipv4.method manual ipv4.addresses 192.168.10.1/24 ipv4.never-default yes
 
 * * *
 
-3\. Firewall & Routing (Nftables)
----------------------------------
+3\. Firewall & Routing: Nftables & Docker Integration
+-----------------------------------------------------
 
-_File:_ `/etc/nftables.conf`
+The core routing logic. This configuration required significant debugging to handle the race condition between Docker networking and the firewall service.
 
-Handles NAT, transparent DNS redirection, and routing policies. **Crucially**, it must load _after_ Docker networks exist.
+### 3.1 The "Interface Not Found" Race Condition
+
+**Historical Issue:** On boot, `nftables.service` failed because it tried to apply rules for `docker0` and `br-xxxx` before Docker had created them.  
+**Fix:** A systemd override was created to force dependency on Docker.
+
+/etc/systemd/system/nftables.service.d/override.conf
+
+    [Unit]
+    # Wait for Network interfaces and IP Forwarding
+    After=network-online.target sysctl.service
+    Wants=network-online.target sysctl.service
+    
+    # CRITICAL: Wait for Docker to start and create bridges
+    Requires=docker.service
+    After=docker.service
+
+### 3.2 Firewall Ruleset
+
+/etc/nftables.conf
 
     #!/usr/sbin/nft -f
     flush ruleset
@@ -103,7 +184,7 @@ Handles NAT, transparent DNS redirection, and routing policies. **Crucially**, i
             ip protocol icmp accept
             iif lo accept
             
-            # Management Access
+            # SSH Access
             iif eth0 tcp dport 22 accept
             
             # LAN Services (DNS, DHCP, Web UI)
@@ -115,18 +196,19 @@ Handles NAT, transparent DNS redirection, and routing policies. **Crucially**, i
             type filter hook forward priority 0; policy drop;
             ct state established,related accept
             
-            # Allow LAN to WAN (New Connections)
+            # 1. LAN to WAN (New Connections)
             iif lan0 oif wan0 ct state new accept
             iif lan0 oif wan1 ct state new accept
             
-            # Allow Docker to WAN
+            # 2. Docker to WAN (New Connections)
+            # Explicitly allows containers to reach the internet
             iif docker0 oif wan0 accept
             iif docker0 oif wan1 accept
-            # Replace br-xxxx with your specific Docker bridge name
-            iif br-xxxx oif wan0 accept
-            iif br-xxxx oif wan1 accept
+            # Replace with your specific dynamic bridge ID
+            iif br-f9536f6adf36-CHANGEME oif wan0 accept
+            iif br-f9536f6adf36-CHANGEME oif wan1 accept
             
-            # Allow Inter-VLAN / LAN-to-LAN
+            # 3. Intra-LAN
             iif lan0 oif lan0 accept
         }
     }
@@ -134,119 +216,142 @@ Handles NAT, transparent DNS redirection, and routing policies. **Crucially**, i
     table ip nat {
         chain postrouting {
             type nat hook postrouting priority 100; policy accept;
+            # Masquerade (NAT) for both WAN interfaces
             oif wan0 masquerade
             oif wan1 masquerade
         }
         
         chain prerouting {
             type nat hook prerouting priority -100; policy accept;
-            # Transparent DNS Redirect
+            # Transparent DNS Redirect (Force LAN to AdGuard Home)
             iif lan0 udp dport 53 redirect
             iif lan0 tcp dport 53 redirect
         }
     }
 
-### Systemd Override for Nftables
+### 3.3 Enabling Services
 
-_File:_ `/etc/systemd/system/nftables.service.d/override.conf`
-
-    [Unit]
-    After=network-online.target sysctl.service docker.service
-    Wants=network-online.target sysctl.service
-    Requires=docker.service
+    # Enable IP Forwarding persistently
+    echo "net.ipv4.ip_forward=1" | sudo tee /etc/sysctl.d/99-ip-forward.conf
+    
+    # Enable Firewall
+    sudo systemctl enable nftables
+    sudo systemctl start nftables
 
 * * *
 
-4\. Services Configuration
---------------------------
+4\. Core Services: DHCP & DNS
+-----------------------------
 
-### A. Dnsmasq (DHCP Server)
+### 4.1 Dnsmasq (DHCP)
 
-_File:_ `/etc/dnsmasq.conf`
+Serves IPs to the LAN and forces clients to use the Pi's IP for DNS.
+
+/etc/dnsmasq.conf
 
     interface=lan0
     dhcp-range=192.168.10.100,192.168.10.250,255.255.255.0,12h
-    dhcp-option=3,192.168.10.1   # Gateway
+    dhcp-option=3,192.168.10.1   # Default Gateway
     dhcp-option=6,192.168.10.1   # DNS Server
     port=0                       # Disable built-in DNS (AdGuard handles this)
 
-### B. AdGuard Home (DNS Filter)
+    sudo systemctl enable dnsmasq
+    sudo systemctl restart dnsmasq
 
--   **Listening Interface:** `0.0.0.0:53` (Binds all IPs)
--   **Upstream DNS:** `8.8.8.8`, `1.1.1.1` (IPv4 Only for stability)
--   **Important Setting:** `disable_ipv6: true` (Prevents timeout issues in multi-WAN).
+### 4.2 AdGuard Home (DNS Filter)
 
-### C. Storage (RAID 1)
+**Critical Fixes:** We encountered upstream timeout issues. The fix was disabling IPv6 upstreams and binding to all interfaces to handle the local redirection.
 
--   **Device:** `/dev/md0` (Mirrored)
--   **Mount Point:** `/mnt/cloudstorage`
--   **Fstab Entry:** `UUID=<UUID> /mnt/cloudstorage ext4 defaults,nofail 0 2`
--   **Monitoring:** Email alerts configured in `/etc/mdadm/mdadm.conf`.
+-   **Binding:** `0.0.0.0:53` (Must listen on all interfaces).
+-   **Upstreams:** `8.8.8.8`, `1.1.1.1` (IPv4 Only).
+-   **Config:** `disable_ipv6: true`.
 
 * * *
 
-5\. Nextcloud & Cloudflare Tunnel (Docker)
-------------------------------------------
+5\. Application Layer: Nextcloud & Cloudflare
+---------------------------------------------
 
-Hosted in `~/nextcloud-docker/` using `docker-compose`.
+Hosted in `~/nextcloud-docker/` using Docker Compose.
 
-### Docker Compose Configuration
+### 5.1 The MariaDB "Access Denied" Fix
 
--   **App:** Nextcloud (Port 8081).
--   **DB:** MariaDB 10.6 (Uses custom `init.sql` to bypass credential bugs).
--   **Volumes:** Data mounted from `/mnt/cloudstorage/nextcloud_data`.
--   **Cron:** Host-based cron job running `docker exec`.
+**Historical Issue:** The official MariaDB container failed to create the user correctly via environment variables on this architecture, leading to an infinite "Access Denied" loop on boot.  
+**Solution:** We disabled env-var user creation and used a manual SQL init script.
 
-### Custom Database Init (`init.sql`)
+~/nextcloud-docker/init-db/init.sql
 
+    -- Allow connection from ANY Docker host (%)
     CREATE USER 'nextclouduser'@'%' IDENTIFIED BY 'YOUR_SECURE_PASSWORD';
     GRANT ALL PRIVILEGES ON nextcloud.* TO 'nextclouduser'@'%';
     FLUSH PRIVILEGES;
 
-### Cloudflare Tunnel
+### 5.2 Docker Compose Configuration
 
--   **Service:** `cloudflared`
--   **Ingress:** Routes `https://your.domain.com` → `http://localhost:8081`.
--   **Access:** Secured via HTTPS (Full Mode) at Cloudflare Edge.
+~/nextcloud-docker/docker-compose.yml
+
+    version: '3.7'
+    services:
+      db:
+        image: mariadb:10.6
+        restart: always
+        command: --transaction-isolation=READ-COMMITTED --binlog-format=ROW
+        volumes:
+          - ./db:/var/lib/mysql
+          - ./init-db:/docker-entrypoint-initdb.d # Custom SQL Fix
+        environment:
+          MYSQL_ROOT_PASSWORD: ROOT_PASSWORD
+          MYSQL_DATABASE: nextcloud
+          # Removed MYSQL_USER/PASSWORD to prevent conflict with init.sql
+    
+      app:
+        image: nextcloud
+        restart: always
+        ports:
+          - 8081:80
+        volumes:
+          - /mnt/cloudstorage/nextcloud_data:/var/www/html/data
+          - ./config:/var/www/html/config
+        environment:
+          MYSQL_HOST: db
+          MYSQL_DATABASE: nextcloud
+          MYSQL_USER: nextclouduser # Matches init.sql
+          MYSQL_PASSWORD: YOUR_SECURE_PASSWORD
+          NEXTCLOUD_TRUSTED_DOMAINS: "cloud.yourdomain.com"
+
+### 5.3 Cloudflare Tunnel
+
+Exposes the service securely without opening ports.
+
+    cloudflared tunnel create pi03-cloud
+    cloudflared tunnel route dns pi03-cloud cloud.yourdomain.com
+
+**Config:** Ingress points to `http://localhost:8081`.
 
 * * *
 
-6\. Troubleshooting & Recovery Commands
----------------------------------------
+6\. Maintenance & Troubleshooting
+---------------------------------
 
-### Network & Routing
+### System Recovery
 
--   **Check IP/Interfaces:** `ip a l`
--   **Check Routes (Metric verification):** `ip r l`
--   **Restart Firewall:** `sudo systemctl restart nftables`
--   **Reload Udev Rules:** `sudo udevadm control --reload-rules && sudo udevadm trigger`
+-   **Restart Network Stack:**
+    
+        sudo systemctl restart NetworkManager
+        sudo systemctl restart nftables
+        sudo systemctl restart dnsmasq
+    
+-   **Reload Udev Rules:** `sudo udevadm control --reload-rules`
 
-### Docker & Services
+### RAID Management
 
--   **Check Container Health:** `docker ps`
--   **Check Docker Logs:** `docker logs nextcloud-docker_app_1`
--   **Restart Nextcloud Stack:** `cd ~/nextcloud-docker && sudo docker-compose restart`
--   **Test Internal DNS:** `dig @127.0.0.1 google.com`
--   **Test External DNS:** `dig @8.8.8.8 google.com`
+-   **Check Status:** `cat /proc/mdstat`
+-   **Detail View:** `sudo mdadm --detail /dev/md0`
+-   **Test Email:** `sudo mdadm --monitor --scan --test`
 
-### RAID 1 Maintenance
+### Logs to Watch
 
--   **Check Health:** `cat /proc/mdstat`
--   **Detailed Status:** `sudo mdadm --detail /dev/md0`
--   **Test Email Alert:** `sudo mdadm --monitor --scan --test`
+-   **Firewall:** `sudo systemctl status nftables`
+-   **DHCP:** `journalctl -u dnsmasq -f`
+-   **Docker Database:** `docker logs nextcloud-docker_db_1`
 
-* * *
-
-### 7\. Known Issues & Fixes
-
--   **"Connection Timed Out" on Nextcloud:**  
-    _Cause:_ `nftables` blocking internal Docker bridge traffic.  
-    _Fix:_ Ensure `forward` chain has `iif br-xxxx oif br-xxxx accept` or reload nftables _after_ Docker starts.
--   **5GHz Wi-Fi Not Visible:**  
-    _Cause:_ Regulatory domain not set.  
-    _Fix:_ `sudo iw reg set <COUNTRY_CODE>` then toggle radio off/on.
--   **USB Over-current on Boot:**  
-    _Fix:_ Ensure high-quality power supply (3.0A+). Use powered USB hub if necessary.
--   **AdGuard Home DNS Failure:**  
-    _Fix:_ Disable IPv6 upstreams in AGH config; bind to `0.0.0.0`.
 
