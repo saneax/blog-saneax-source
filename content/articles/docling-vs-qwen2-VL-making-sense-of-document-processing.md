@@ -50,3 +50,4 @@ If I'm building a **Search Engine or Knowledge Base** where I need to ingest 10,
 If I'm building an **AI Agent** that needs to look at a receipt, answer a specific question about a chart, or turn a screenshot into code: **I'm using Qwen2-VL.** The visual reasoning capability is just too good to pass up.
 
 **Pro-tip:** The "God Mode" setup? Use Docling to chunk the document and handle the layout, but swap out its default OCR engine for a Vision LLM (like Qwen) when you hit a really complex page. Best of both worlds.
+{{< comments >}}
