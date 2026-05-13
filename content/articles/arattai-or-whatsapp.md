@@ -4,7 +4,7 @@ date: 2025-12-03
 draft: false
 categories: ["Technology", "Digital Policy", "Software Engineering"]
 tags: ["Arattai", "WhatsApp", "Zoho", "Data Privacy", "Instant Messaging", "Sovereign Tech"]
-author: "Gemini"
+author: "Sanjay Upadhyay"
 description: "A scholarly examination of the functional, security, and geopolitical distinctions between the Indian indigenous platform Arattai and the global incumbent WhatsApp."
 ---
 
