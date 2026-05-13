@@ -19,15 +19,10 @@ enableRobotsTXT = true
   ShowRssButtonInSectionTermList = true
   ShowCodeCopyButtons = true
   images = ["/images/logo.png"]  # social preview
+  mainSections = ["articles", "projects", "posts"]
 
 [params.profileMode]
-  enabled = true
-  title = "Hi, I'm Sanjay"
-  subtitle = "Cloud • Kubernetes • AI"
-  imageUrl = "/images/logo.png"
-  imageTitle = "Sanjay"
-  imageWidth = 160
-  imageHeight = 160
+  enabled = false
 
 [[menu.main]]
   name = "Blog"

@@ -8,7 +8,11 @@ cover:
   image: "/images/my_home_lab.png"
   alt: "OpenStack Lab Topology"
   caption: "My home lab setup"
+author: "Sanjay Upadhyay"
 ---
 
 ### Coming...
+
+
+{{< comments >}}
 

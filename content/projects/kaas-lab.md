@@ -9,6 +9,7 @@ cover:
   image: "/images/covers/kaas-lab.webp"
   alt: "KaaS lab topology"
   caption: "Nested virtualization setup for KaaS automation testing."
+author: "Sanjay Upadhyay"
 ---
 
 This article walks through a **KaaS (Kubernetes-as-a-Service)** lab designed to emulate a production data center.  

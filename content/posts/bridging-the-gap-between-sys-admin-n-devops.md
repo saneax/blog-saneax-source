@@ -2,6 +2,7 @@
 title = 'Bridging the gap between Sys Admin N Devops'
 date = 2025-10-30T07:59:12+05:30
 draft = false
+author = 'Sanjay Upadhyay'
 +++
 
 # Bridging the Gap: From Sysadmin Veteran to DevOps Pioneer
@@ -40,4 +41,7 @@ The future of IT is not about "dev vs. ops"; it's about "dev + ops" working seam
 
 
 ![A conceptual graphic showing 'Dev' and 'Ops' teams shaking hands or forming a cohesive circle](/images/image_3.jpg)
+
+
+{{< comments >}}
 

@@ -9,6 +9,7 @@ cover:
   image: "/images/covers/openstack-automation.webp"
   alt: "OpenStack automation workflow"
   caption: "Automating OpenStack deployment and verification."
+author: "Sanjay Upadhyay"
 ---
 
 This project outlines the development of an **Ansible-driven automation framework** to deploy, configure, and validate OpenStack components for lab or CI use cases.
@@ -20,4 +21,7 @@ This project outlines the development of an **Ansible-driven automation framewor
 - Integration with CI/CD pipelines (Jenkins or GitLab CI)
 
 **Result:** Reduced deployment complexity and improved repeatability for OpenStack environments.
+
+
+{{< comments >}}
 

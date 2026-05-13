@@ -5,6 +5,7 @@ draft: false
 tags: ["genai", "ocr", "python", "open-source", "llm"]
 categories: ["Engineering", "AI"]
 summary: "I spent the weekend comparing IBM's Docling and the Qwen2 Vision Model for document extraction. One is a structural architect, the other is a creative genius. Here is which one you should actually use."
+author: "Sanjay Upadhyay"
 ---
 
 I’ve been wrestling with document extraction lately. You know the drill: you have a PDF (or a screenshot of one), and you need to turn it into something a computer can actually understand—not just a bag of words, but text with *meaning*.

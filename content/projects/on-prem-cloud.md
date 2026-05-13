@@ -9,6 +9,7 @@ cover:
   image: "/images/covers/scorelabs-cloud.webp"
   alt: "On Prem Cloud architecture diagram"
   caption: "On Prem Cloud — bridging OpenStack and Kubernetes for AI workloads."
+author: "Sanjay Upadhyay"
 ---
 
 **On Prem Cloud** is an R&D initiative to unify multiple OpenStack clusters into a managed, multi-tenant platform.  

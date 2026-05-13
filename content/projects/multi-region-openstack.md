@@ -9,6 +9,7 @@ cover:
   image: "/images/covers/multi-region-openstack.webp"
   alt: "Multi-region OpenStack architecture"
   caption: "Federating OpenStack regions for AI workloads."
+author: "Sanjay Upadhyay"
 ---
 
 This study documents how to design and deploy a **multi-region OpenStack environment** capable of hosting Kubernetes clusters and serving **AI inference workloads** efficiently on CPUs.

@@ -1301,3 +1301,6 @@ sudo nmcli connection up "Wired connection 1"
 If it's not there, check `journalctl`. If it's not there either, well —
 that's what makes us all sysadmins.*
 ```
+
+{{< comments >}}
+

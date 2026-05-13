@@ -35,6 +35,7 @@ showToc: true
 tocOpen: true
 coverCaption: true
 series: ["Virtualization Deep Dive"]
+author: "Sanjay Upadhyay"
 ---
 
 ##  Blog Outline (Content Overview)
