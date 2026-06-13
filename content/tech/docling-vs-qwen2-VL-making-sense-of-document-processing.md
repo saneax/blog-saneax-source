@@ -1,8 +1,9 @@
 ---
 title: "Docling vs. Qwen2-VL: How to actually get text out of PDFs"
 date: 2025-12-05T20:50:00+05:30
+aliases: ["/articles/docling-vs-qwen2-VL-making-sense-of-document-processing/"]
 draft: false
-tags: ["genai", "ocr", "python", "open-source", "llm"]
+tags: ["tech","genai", "ocr", "python", "open-source", "llm"]
 categories: ["Engineering", "AI"]
 summary: "I spent the weekend comparing IBM's Docling and the Qwen2 Vision Model for document extraction. One is a structural architect, the other is a creative genius. Here is which one you should actually use."
 author: "Sanjay Upadhyay"

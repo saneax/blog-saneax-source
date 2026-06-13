@@ -3,14 +3,14 @@ title: "GnuPG (GPG) Command Cheat Sheet: Encryption & Signing Guide"
 date: "2026-04-30T08:06:59+00:00"
 draft: false
 type: "post"
-tags: ["gpg", "security", "encryption", "linux", "cheat-sheet", "privacy", "gnupg"]
+tags: ["tech","gpg", "security", "encryption", "linux", "cheat-sheet", "privacy", "gnupg"]
 categories: ["Security", "DevOps", "Tools"]
 description: "A comprehensive GnuPG cheat sheet covering key management, encryption, signing, and advanced features. Includes SEO-friendly commands and best practices for secure communication."
 summary: "Quick reference guide for GnuPG commands including key generation, encryption, decryption, signing, and advanced security features."
 author: "Sanjay Upadhyay"
 toc: true
 slug: "gnupg-cheat-sheet"
-aliases: ["/gpg-commands/", "/encryption-guide/"]
+aliases: ["/articles/gnupg-cheat-sheet/", "/gpg-commands/", "/encryption-guide/"]
 ---
 
 GNU Privacy Guard (GnuPG or GPG) is the standard for secure communication and file encryption on Linux and Unix-like systems. Whether you are signing Git commits, encrypting emails, or securing sensitive files, having a quick reference for commands is essential.

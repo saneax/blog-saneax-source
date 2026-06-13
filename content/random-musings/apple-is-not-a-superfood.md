@@ -1,6 +1,7 @@
 ---
 title: "The Apple Is Not a Superfood—It Is a Stressor and Stopgap"
 date: 2026-05-02
+aliases: ["/articles/apple-is-not-a-superfood/"]
 draft: false
 tags: ["nutrition", "food politics", "hormesis", "public health", "food systems"]
 author: "Sanjay Upadhyay"

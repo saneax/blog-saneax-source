@@ -2,6 +2,7 @@
 title: "Fact Check: Muslims in India, Allegations of Hatred, and the Data on Development"
 description: "A data-driven rebuttal to 7 common claims about Muslims, Modi's governance, and democracy in India, using official statistics and independent survey results."
 date: 2026-05-06
+aliases: ["/articles/fact-check-muslims-in-india-allegations-of-hatred/"]
 draft: false
 categories:
   - Politics

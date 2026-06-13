@@ -1,6 +1,7 @@
 ---
 title: "Creating and Customizing Virtual Machines with NUMA Awareness on Modern Linux (Fedora/Ubuntu 2025)"
 date: 2025-11-02T10:00:00+05:30
+aliases: ["/projects/numa-aware-vm/"]
 description: "A step-by-step guide to creating virtual machines on Fedora or Ubuntu using QEMU/KVM and libvirt, including NUMA-aware CPU and memory configuration for optimized performance on modern hardware."
 summary: "Learn how to create, manage, and tune virtual machines with NUMA awareness using QEMU, KVM, and libvirt on Fedora and Ubuntu. Includes examples for NUMA topology, CPU pinning, hugepages, and bridge networking."
 slug: "virtualization-numa-guide"

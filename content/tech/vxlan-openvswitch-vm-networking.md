@@ -1,6 +1,7 @@
 ---
 title: "Connecting Virtual Machines Across Hosts Using VXLAN and Open vSwitch on Linux"
 date: 2025-11-02T10:00:00+05:30
+aliases: ["/projects/vxlan-openvswitch-vm-networking/"]
 description: "Learn how to create VXLAN-based virtual networks using Open vSwitch (OVS) to connect VMs running on different physical hosts, even when each host has only one physical NIC."
 summary: "Step-by-step guide to configuring Open vSwitch bridges, VXLAN tunnels, and multi-network virtual machines for cross-host communication on Linux. Includes setup for Fedora and Ubuntu with a single NIC per host."
 slug: "vxlan-openvswitch-vm-networking"

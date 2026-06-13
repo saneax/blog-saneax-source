@@ -2,6 +2,7 @@
 title: "Bhakti and the Spiritual Renaissance After Chaitanya Mahaprabhu"
 subtitle: "On the 411th anniversary of the Chaitanya Charitamrita, a journey through the text that resolved the debate between Mayavada and Bhakti"
 date: 2026-05-15T04:29:07Z
+aliases: ["/articles/chaitanya-charitamrita-411-bhakti-renaissance/"]
 author: "Sanjay Upadhyay"
 description: "Marking 411 years since Krishna Das Kaviraj Goswami completed the Chaitanya Charitamrita in 1615 CE — the definitive biography of Sri Chaitanya Mahaprabhu that established Achintya Bhedabheda philosophy and resolved the centuries-old tension between impersonal Mayavada and devotional Bhakti."
 canonical: "https://saneax.in/articles/chaitanya-charitamrita-411-bhakti-renaissance"

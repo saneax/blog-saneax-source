@@ -1,13 +1,14 @@
 ---
 title: "Running a Debian 13 VM on Fedora 42 with Bridged Networking, Podman, and Minikube"
 date: "2026-05-11T05:07:39Z"
+aliases: ["/projects/debian13-vm-on-fedora-bridged-networking-podman-minikube/"]
 author: "Sanjay Upadhyay"
 description: >
   A complete, step-by-step guide to creating a Debian 13 virtual machine on
   Fedora 42 with bridged networking, cloud-init provisioning, root password
   setup, container tooling (podman, buildah, skopeo), and a multi-node
   Kubernetes cluster via minikube.
-tags: ["fedora", "debian", "kvm", "libvirt", "podman", "minikube", "kubernetes", "cloud-init"]
+tags: ["tech","fedora", "debian", "kvm", "libvirt", "podman", "minikube", "kubernetes", "cloud-init"]
 categories: ["Projects", "virtualization", "containers"]
 draft: false
 ---

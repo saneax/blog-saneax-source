@@ -1,10 +1,11 @@
 ---
 title: "OpenStack Automation Framework"
 date: 2025-10-30
+aliases: ["/projects/openstack-automation/"]
 description: "Ansible-based automation for OpenStack deployment and continuous validation."
 summary: "Creating a modular, reproducible automation framework to deploy OpenStack and validate networking performance."
 draft: false
-tags: ["ansible", "openstack", "dpdk", "ci-cd"]
+tags: ["tech","ansible", "openstack", "dpdk", "ci-cd"]
 cover:
   image: "/images/covers/openstack-automation.webp"
   alt: "OpenStack automation workflow"

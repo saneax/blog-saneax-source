@@ -1,10 +1,11 @@
 ---
 title: "Bridging the gap: From Sys Admin to Devops Pioneer"
 date: 2025-10-30
+aliases: ["/articles/bridging-the-gap-between-sys-admin-n-devops/"]
 description: "A article on my experience on the changes that have gone in making a devops today"
 summary: "A veteran sys admins journal on changes that has come around and being a devops"
 draft: false
-tags: ["kubernetes", "metal3", "networking", "automation"]
+tags: ["tech","kubernetes", "metal3", "networking", "automation"]
 cover:
   alt: "briging gap between sys admin and devops"
 author: "Sanjay Upadhyay"

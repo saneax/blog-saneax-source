@@ -1,10 +1,11 @@
 ---
 title: "On Prem Cloud"
 date: 2025-10-30
+aliases: ["/projects/on-prem-cloud/"]
 description: "Managed cloud service for cost-efficient LLM inference built on OpenStack + Kubernetes."
 summary: "Building a unified, multi-data-center OpenStack platform for CPU-based LLM inference and cloud services."
 draft: false
-tags: ["openstack", "llm", "kaas", "automation"]
+tags: ["tech","openstack", "llm", "kaas", "automation"]
 cover:
   image: "/images/covers/scorelabs-cloud.webp"
   alt: "On Prem Cloud architecture diagram"

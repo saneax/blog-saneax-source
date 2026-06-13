@@ -1,9 +1,10 @@
 ---
 title: "Pi03: Transparent Router, Content Filter & Personal Cloud"
 date: 2025-11-23T19:00:00+05:30
+aliases: ["/projects/transparent-router-content-filter-personal-cloud/"]
 draft: false
 author: "Sanjay Upadhyay"
-tags: ["Raspberry Pi", "Networking", "Home Lab", "Nextcloud", "AdGuard Home", "Docker", "Linux"]
+tags: ["tech","Raspberry Pi", "Networking", "Home Lab", "Nextcloud", "AdGuard Home", "Docker", "Linux"]
 categories: ["Projects", "Documentation"]
 description: "Comprehensive documentation for setting up a Raspberry Pi 4 as a multi-WAN router, transparent content filter, and RAID 1 cloud storage server."
 ---

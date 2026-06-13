@@ -1,6 +1,7 @@
 ---
 title: "Banaras Ki Bhor"
 date: "2025-11-28T10:27:35+05:30"
+aliases: ["/articles/banaras-ki-bhor/"]
 draft: false
 author: "Sanjay Upadhyay"
 tags: [ 'poetry', 'life', 'everything' ]

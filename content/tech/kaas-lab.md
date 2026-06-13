@@ -1,10 +1,11 @@
 ---
 title: "Kubernetes-as-a-Service (KaaS) Lab"
 date: 2025-10-30
+aliases: ["/projects/kaas-lab/"]
 description: "A virtualized environment for testing full KaaS lifecycle automation."
 summary: "Hands-on exploration of cluster provisioning, network isolation, and tenant automation in a lab-scale Kubernetes setup."
 draft: false
-tags: ["kubernetes", "metal3", "networking", "automation"]
+tags: ["tech","kubernetes", "metal3", "networking", "automation"]
 cover:
   image: "/images/covers/kaas-lab.webp"
   alt: "KaaS lab topology"

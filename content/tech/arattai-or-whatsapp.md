@@ -1,9 +1,10 @@
 ---
 title: "Arattai vs WhatsApp: Why I Started Paying Attention to a Homegrown Messenger"
 date: 2025-12-03
+aliases: ["/articles/arattai-or-whatsapp/"]
 draft: false
 categories: ["Technology", "Digital Policy", "Software Engineering"]
-tags: ["Arattai", "WhatsApp", "Zoho", "Data Privacy", "Instant Messaging", "Sovereign Tech"]
+tags: ["tech","Arattai", "WhatsApp", "Zoho", "Data Privacy", "Instant Messaging", "Sovereign Tech"]
 author: "Sanjay Upadhyay"
 description: "Why I started paying attention to Zoho's Arattai as a serious alternative to WhatsApp — and what it gets right (and wrong) compared to the global giant."
 ---

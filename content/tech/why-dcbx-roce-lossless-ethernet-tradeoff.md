@@ -1,8 +1,9 @@
 ---
 title: "Why Your 10G Network Still Drops Packets: DCBX, RoCE, and the Lossless Ethernet Trade-Off"
 date: 2026-06-13T21:45:00+05:30
+aliases: ["/articles/why-dcbx-roce-lossless-ethernet-tradeoff/"]
 draft: false
-tags: ["rdma", "roce", "dcbx", "networking", "data-center", "distributed-systems", "linux", "kernel-bypass", "ai-infrastructure", "gpu-clusters"]
+tags: ["tech","rdma", "roce", "dcbx", "networking", "data-center", "distributed-systems", "linux", "kernel-bypass", "ai-infrastructure", "gpu-clusters"]
 categories: ["Engineering", "Infrastructure"]
 summary: "I've spent years designing lossless Ethernet fabrics for latency-sensitive workloads. Here's why DCBX and RoCE are the unsung backbone of everything from high-frequency trading to training billion-parameter models across GPU clusters."
 author: "Sanjay Upadhyay"

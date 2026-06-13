@@ -1,6 +1,7 @@
 ---
 title: "The BJP’s Bengal Victory: A Democratic Reassertion, Not Erosion – A Civilizational Hindu Rebuttal"
 date: 2026-05-11T15:00:00+05:30
+aliases: ["/articles/bjp-bengal-victory-a-democratic-reassertion-not-erosion/"]
 description: "A detailed point-by-point rebuttal to Nilanjan Mukhopadhyay's Al Jazeera article claiming BJP's 2026 Bengal victory erodes Indian democracy. From a Hindu civilizational perspective, addressing voter rolls, Hindutva, and the historical blood debt from centuries of invasions, massacres, and forced conversions."
 slug: "bjp-bengal-victory-democratic-reassertion-not-erosion-civilizational-rebuttal"
 categories:

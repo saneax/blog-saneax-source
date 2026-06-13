@@ -1,16 +1,13 @@
 baseURL = 'https://blog.saneax.in/'
-# languageCode = 'en-us'
 title = 'Sanjay Upadhyay'
-# logo = '/images/logo.png'
 theme = "PaperMod"
 languageCode = "en-us"
-# paginate = 10
 enableRobotsTXT = true
 
 [params]
   env = "production"
-  defaultTheme = "auto"          # dark/light auto
-  description = "Engineering notes on OpenStack, K8s & AI."
+  defaultTheme = "auto"
+  description = "Engineering notes on networking, infrastructure, AI, and the occasional cultural commentary."
   author = "Sanjay Upadhyay"
   ShowReadingTime = true
   ShowShareButtons = true
@@ -18,8 +15,8 @@ enableRobotsTXT = true
   ShowBreadCrumbs = true
   ShowRssButtonInSectionTermList = true
   ShowCodeCopyButtons = true
-  images = ["/images/logo.png"]  # social preview
-  mainSections = ["articles", "projects", "posts"]
+  images = ["/images/logo.png"]
+  mainSections = ["tech", "random-musings"]
 
 [params.profileMode]
   enabled = false
@@ -29,12 +26,12 @@ enableRobotsTXT = true
   url  = "/"
   weight = 10
 [[menu.main]]
-  name = "Projects"
-  url  = "/projects/"
+  name = "Tech"
+  url  = "/tech/"
   weight = 20
 [[menu.main]]
-  name = "Articles"
-  url  = "/articles/"
+  name = "Random Musings"
+  url  = "/random-musings/"
   weight = 30
 [[menu.main]]
   name = "About"
@@ -43,9 +40,9 @@ enableRobotsTXT = true
 
 [markup]
   [markup.highlight]
-    noClasses = false             # use Chroma for code styling
+    noClasses = false
   [markup.goldmark.renderer]
-    unsafe = true                 # allow HTML in Markdown
+    unsafe = true
 
 [minify]
   minifyOutput = true
