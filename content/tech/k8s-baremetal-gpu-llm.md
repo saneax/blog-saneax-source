@@ -1,6 +1,6 @@
 ---
 title: "Your Own Private LLM Farm: Bare-Metal K8s With GPU Autoscaling"
-date: "2026-06-18T19:15:00+05:30"
+date: "2026-06-18T18:55:00+05:30"
 description: "Setting up a bare-metal Kubernetes cluster for LLM inference with GPU-based horizontal pod autoscaling, API key auth, and admin token management"
 summary: "I wanted my own LLM inference setup on bare metal — GPU-backed K8s, autoscaling that actually works with vLLM metrics, and auth so random internet people can't drain my GPU credits. Here's how it went."
 draft: false
