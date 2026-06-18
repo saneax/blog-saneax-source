@@ -1,6 +1,6 @@
 ---
 title: "Pi.dev: The Coding Agent You Actually Control"
-date: "2026-06-18T22:30:00+05:30"
+date: "2026-06-03T22:30:00+05:30"
 description: "A hands-on walkthrough of Pi — the minimal terminal-based coding agent with extensions, skills, and no vendor lock-in"
 summary: "Pi is a coding agent that doesn't tell you how to work. Terminal-native, extensible via TypeScript, with 15+ providers and four operating modes. Here's how it works, what makes it different from Cursor and Claude Code, and how to build your first extension."
 draft: false
