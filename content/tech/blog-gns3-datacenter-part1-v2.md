@@ -9,7 +9,7 @@ tags: ["gns3", "networking", "linux", "bridges", "taps", "datacenter", "virtuali
 **Series: Learn Datacenter Networking on Your Laptop**
 
 - **Part 1** ← You are here — GNS3 foundation, virtual networking mental model, bridges, taps, Linux networking across distros
-- **[Part 2: VLANs, Bonding, and Network Segregation]**() — *Coming June 24*
+- **Part 2: VLANs, Bonding, and Network Segregation** — *Coming June 24*
 - **[Part 3: iPerf3, Fiber, and Juniper — Testing Your Datacenter Network Like a Pro](https://blog.saneax.in/tech/iperf-datacenter-fiber-testing/)**
 
 ---
