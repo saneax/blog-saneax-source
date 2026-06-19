@@ -18,11 +18,11 @@ Anyway. Here's what I've learned the hard way.
 
 If you only know five things, know these:
 
-1. `git init` — makes a folder a repo. You only do this once per project.
-2. `git add` and `git commit` — staging and saving your work locally.
-3. `git push` and `git pull` — sending and receiving changes from GitHub or wherever.
-4. `git branch` and `git checkout` — working on separate lines of development.
-5. `git merge` — joining those lines back together.
+- `git init` — makes a folder a repo. You only do this once per project.
+- `git add` and `git commit` — staging and saving your work locally. I lump these together because you almost never do one without the other.
+- `git push` and `git pull` — sending and receiving changes from GitHub or wherever.
+- `git branch` and `git checkout` — working on separate lines of development.
+- `git merge` — joining those lines back together.
 
 Everything else is gravy. You can get shockingly far with just these.
 
@@ -39,19 +39,21 @@ When you find a project on GitHub you want to contribute to:
 
 The flow is: fork → clone your fork → make changes → push to your fork → open a Pull Request.
 
-Where people trip: they fork, clone, make changes, then try to push directly to the original repo. Git will yell at you because you don't have write access. Fork first, kids.
+Where people trip: they fork, clone, make changes, then try to push directly to the original repo. Git will yell at you because you don't have write access.
 
-## Common Mistakes I've Made So You Don't Have To
+Fork first, kids.
 
-### 1. Committing straight to main
+## Things I've Done So You Don't Have To
 
-I already mentioned this but it deserves its own section because I've done it like twenty times. You're on main, you make a small change, commit, push. Next thing you know you're working on something half-baked and someone else pulls your incomplete code. Now their app is broken too. Congratulations, you're the reason the team meeting happened.
+### Committing straight to main
+
+I already mentioned this but it deserves its own bit because I've done it like twenty times. You're on main, you make a small change, commit, push. Next thing you know you're working on something half-baked and someone else pulls your incomplete code. Now their app is broken too. Congratulations, you're the reason the team meeting happened.
 
 **Fix:** `git checkout -b fix/login-button` before touching anything. Always. Train your fingers.
 
-### 2. The dreaded merge conflict and immediate panic
+### The dread merge conflict
 
-Merge conflicts happen when two people change the same part of the same file. Git doesn't know whose version to keep. So it puts both in the file and makes you decide.
+This happens when two people change the same part of the same file. Git doesn't know whose version to keep. So it puts both in the file and makes you decide.
 
 The first time I saw one I literally deleted the whole file and re-cloned. Don't do that.
 
@@ -59,15 +61,15 @@ The first time I saw one I literally deleted the whole file and re-cloned. Don't
 
 The video shows this pretty clearly. Open the file, look for the mess, clean it up, move on. It's not scary after the second time.
 
-### 3. Messing up a rebase
+### Messing up a rebase
 
 Rebasing is basically "I want to pretend I've been working on top of the latest code all along." It rewrites history. If you've already pushed your branch and someone else is working on it, rebasing will ruin their day.
 
-**Golden rule:** rebase your own local branches only. Never rebase shared branches. If you're not sure, just merge instead of rebase. Merging is safer even if the history is a little uglier.
+**Golden rule:** rebase your own local branches only. Never rebase shared branches. If you're not sure, just merge instead of rebase. Merge is safer even if the history is a little uglier.
 
 I don't think I'd go as far as the people who say "never rebase" — that's dramatic. But know what you're getting into.
 
-### 4. Push before pulling and getting rejected
+### Push before pulling
 
 You made changes, someone else pushed theirs first, now Git says *"rejected — fetch first."* This is normal. Pull their changes first, resolve any conflicts locally, then push.
 
@@ -80,15 +82,15 @@ git pull
 git push
 ```
 
-That works 90% of the time. The 10% is when conflicts happen and you need to do the `<<<<<<<` dance I mentioned above.
+That works 90% of the time. The 10% is when conflicts happen and you need to do the <<<<<<< dance I mentioned above.
 
-### 5. `.gitignore` neglect
+### `.gitignore` neglect
 
 You don't want to commit environment variables, API keys, compiled binaries, or that `node_modules` folder. A good `.gitignore` at the start of the project saves headaches later.
 
 **Speaking from recent personal experience:** we had a security incident in one of my repos because someone (me, it was me) committed a `.env` file with actual API keys in it. We had to rewrite git history to purge it. If the repo was public, anyone could've seen those keys by checking git log. Don't be me. Add `.env` to `.gitignore` on day one. Check the file in.
 
-## Working With a Team — The Social Layer
+## Working With a Team
 
 Git is the tool. The hard part is the people.
 
@@ -102,7 +104,7 @@ Git is the tool. The hard part is the people.
 
 Sometimes you `git merge` and everything looks fine until someone runs the tests. Or you force-pushed the wrong branch. Or you realized that the feature branch you've been working on for three days was branched off an outdated main.
 
-**`git reflog`** — this is your emergency exit. Git keeps a log of every movement of HEAD. If you lose something, `git reflog` shows where HEAD was. Use `git reset --hard HEAD@{n}` to go back. But only do this on your local repo. Same rule as rebase — don't rewrite history people are relying on.
+**`git reflog`** — this is your emergency exit. Git keeps a log of every movement of HEAD. If you lose something, `git reflog` shows where HEAD was. Use `git reset --hard HEAD@{n}` to go back. But only do this on your local repo. Same rule as rebase — don't rewrite history other people are relying on.
 
 ## Blame Games and the Art of Finding Who Broke It
 
@@ -128,7 +130,7 @@ git log -p --follow -S "functionName" -- filename.js
 
 `-S` searches the diff for a specific string appearing or disappearing. If a variable changed from `isAdmin` to `hasAdminRole` and suddenly auth is broken, `-S "isAdmin"` shows you every commit that touched that string. No more scrolling through irrelevant commits.
 
-### `git blame` is not an accusation
+### `git blame` is not an accusation, I promise
 
 I know the name sounds aggressive. `git blame` shows you who last changed each line of a file, and in which commit. It's not about pointing fingers — it's about finding context.
 
@@ -138,7 +140,7 @@ git blame app/controllers/auth.rb
 
 You see commit hashes and authors next to every line. Grab the hash, run `git show <hash>` to see the full diff and — if the team writes decent messages — the *why* behind the change.
 
-The actual flow for debugging an incident:
+The actual flow for debugging:
 
 1. Find the error in your logs or monitoring
 2. Identify the file and line where the error originates
@@ -149,17 +151,19 @@ The actual flow for debugging an incident:
 
 And yeah, sometimes `git blame` points back to you. That's fine. It's better to know fast and fix fast than spend four hours debugging while pretending you didn't write that line.
 
-### Common gotcha: blame doesn't lie, but whitespace can confuse it
+Also — I once spent an hour blaming the wrong person because I forgot I was on a different branch. True story.
 
-If someone ran an auto-formatter across the file, `git blame` will point at the formatter commit for every line, even though the actual logic change happened months earlier. In that case use `git blame -w` to ignore whitespace changes. It skips over the formatting commit and shows the real author.
+### Common gotcha: whitespace
 
-### `git bisect` — binary search for bugs
+If someone ran an auto-formatter across the file, `git blame` will point at the formatter commit for every line, even though the actual logic change happened months earlier. Use `git blame -w` to ignore whitespace changes. It skips over the formatting commit and shows the real author.
 
-This one feels like magic the first time you use it. You have a working commit (good) and a broken commit (bad). `git bisect` does a binary search through the history, checking out commits in between and asking you "is this one good or bad?"
+### `git bisect` — magic
+
+You have a working commit (good) and a broken commit (bad). `git bisect` does a binary search through the history.
 
 ```
 git bisect start
-git bisect bad HEAD
+git bisect bad HEAD           
 git bisect good v2.0.0
 ```
 
@@ -168,6 +172,12 @@ Git checks out a commit halfway between. You test it, mark it good or bad, and i
 I automate it with `git bisect run` when I can write a test script that returns 0 for good and non-zero for bad. Let the computer do the boring work.
 
 None of these skills are flashy. But when the production pager goes off and everyone's looking at you, knowing how to trace a line of code back to the PR that introduced it is worth more than all the merge conflict tricks in the world.
+
+## One More Thing About Branches
+
+I forgot to mention this earlier and it's bugging me so here it is — naming branches. Please name them something meaningful. Not `branch2`, not `new-branch`, not `test`. Call it `fix/payment-timeout` or `feat/user-dashboard`. It makes a massive difference when you're looking at a list of twenty branches and trying to remember which one does what.
+
+I've been guilty of `fix-fix-real-one-this-time`. We all have our moments.
 
 ## The Part Where I Admit I'm Still Learning
 
