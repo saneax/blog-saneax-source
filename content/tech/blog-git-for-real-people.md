@@ -104,6 +104,71 @@ Sometimes you `git merge` and everything looks fine until someone runs the tests
 
 **`git reflog`** — this is your emergency exit. Git keeps a log of every movement of HEAD. If you lose something, `git reflog` shows where HEAD was. Use `git reset --hard HEAD@{n}` to go back. But only do this on your local repo. Same rule as rebase — don't rewrite history people are relying on.
 
+## Blame Games and the Art of Finding Who Broke It
+
+This might be the most underrated Git skill nobody talks about in beginner tutorials. You'll pick up `add`, `commit`, and `push` in a week. Reading logs and tracing bugs back to their origin? That takes years of being woken up at 3 AM for a production issue.
+
+Here's the scenario: you're on-call, someone reports a bug in production, and you need to find out which change broke it and revert it fast. You don't have time to read every PR. You need the smoking gun.
+
+### `git log` — but with taste
+
+Plain `git log` is fine for casual browsing. For debugging, you want these:
+
+```
+git log --oneline --graph --decorate --all
+```
+
+Shows the whole branching picture – who branched from where, which merges happened, where two lines of work converged. I alias this to `git lol` because it looks like a graph of laughing commits.
+
+But the real money is:
+
+```
+git log -p --follow -S "functionName" -- filename.js
+```
+
+`-S` searches the diff for a specific string appearing or disappearing. If a variable changed from `isAdmin` to `hasAdminRole` and suddenly auth is broken, `-S "isAdmin"` shows you every commit that touched that string. No more scrolling through irrelevant commits.
+
+### `git blame` is not an accusation
+
+I know the name sounds aggressive. `git blame` shows you who last changed each line of a file, and in which commit. It's not about pointing fingers — it's about finding context.
+
+```
+git blame app/controllers/auth.rb
+```
+
+You see commit hashes and authors next to every line. Grab the hash, run `git show <hash>` to see the full diff and — if the team writes decent messages — the *why* behind the change.
+
+The actual flow for debugging an incident:
+
+1. Find the error in your logs or monitoring
+2. Identify the file and line where the error originates
+3. `git blame` that file, find the commit that introduced the bad line
+4. `git log -1 <hash>` to read the full commit message and PR reference
+5. Now you have context: was it a rushed hotfix? A misunderstood requirement? A merge that incorrectly resolved a conflict?
+6. Decide: revert the commit (`git revert <hash>`) or patch forward
+
+And yeah, sometimes `git blame` points back to you. That's fine. It's better to know fast and fix fast than spend four hours debugging while pretending you didn't write that line.
+
+### Common gotcha: blame doesn't lie, but whitespace can confuse it
+
+If someone ran an auto-formatter across the file, `git blame` will point at the formatter commit for every line, even though the actual logic change happened months earlier. In that case use `git blame -w` to ignore whitespace changes. It skips over the formatting commit and shows the real author.
+
+### `git bisect` — binary search for bugs
+
+This one feels like magic the first time you use it. You have a working commit (good) and a broken commit (bad). `git bisect` does a binary search through the history, checking out commits in between and asking you "is this one good or bad?"
+
+```
+git bisect start
+git bisect bad HEAD
+git bisect good v2.0.0
+```
+
+Git checks out a commit halfway between. You test it, mark it good or bad, and it narrows down until it finds the exact commit that introduced the bug. For a repo with 1000 commits between good and bad, that's about 10 checkouts instead of 1000.
+
+I automate it with `git bisect run` when I can write a test script that returns 0 for good and non-zero for bad. Let the computer do the boring work.
+
+None of these skills are flashy. But when the production pager goes off and everyone's looking at you, knowing how to trace a line of code back to the PR that introduced it is worth more than all the merge conflict tricks in the world.
+
 ## The Part Where I Admit I'm Still Learning
 
 I've been using Git for years and I still google "how to undo a git commit" at least once a month. The command is `git reset HEAD~1` by the way. I should know that by now. I don't. I look it up every single time.
