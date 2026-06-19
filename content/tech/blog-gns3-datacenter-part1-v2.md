@@ -8,11 +8,9 @@ tags: ["gns3", "networking", "linux", "bridges", "taps", "datacenter", "virtuali
 
 **Series: Learn Datacenter Networking on Your Laptop**
 
-This is Part 1 of a 3-part series on building real datacenter networking patterns inside GNS3 on your laptop. The whole series:
-
-- **Part 1** — GNS3 foundation, virtual networking mental model, how bridges and taps work, Linux networking across distros, and first GNS3 lab
-- **Part 2** — VLANs, NIC bonding modes, link aggregation (LACP), network segregation with one NIC vs many, Juniper switch-side config
-- **Part 3** — Advanced labs: tap-to-real-network bridging, testing failover, isolated storage/management/DMZ networks in GNS3
+- **Part 1** ← You are here — GNS3 foundation, virtual networking mental model, bridges, taps, Linux networking across distros
+- **[Part 2: VLANs, Bonding, and Network Segregation]**() — *Coming June 24*
+- **[Part 3: iPerf3, Fiber, and Juniper — Testing Your Datacenter Network Like a Pro](https://blog.saneax.in/tech/iperf-datacenter-fiber-testing/)**
 
 ---
 
@@ -506,6 +504,8 @@ By the time you're done with Part 1, you should be able to:
 This is the foundation. Part 2 will layer VLANs and bonding on top of it, and we'll configure a Juniper switch inside GNS3 to match.
 
 The commands and patterns here work the same whether you're on a ThinkPad in a coffee shop or managing a 48-port top-of-rack switch in a colo. The hardware changes. The fundamentals don't.
+
+**Next in the series:** [Part 3: iPerf3, Fiber, and Juniper — Testing Your Datacenter Network](https://blog.saneax.in/tech/iperf-datacenter-fiber-testing/) covers what happens after you've built your network — measuring actual throughput, diagnosing fiber issues, and using Juniper DOM readings.
 
 ## Credits & Further Reading
 
