@@ -20,6 +20,8 @@ I've been managing datacenter networks for a few years now. Not hyperscaler stuf
 
 The thing nobody tells you: you can learn most of this on a basic laptop. You don't need a rack. You don't need a lab with 12 switches. You need GNS3, a Linux VM, and the willingness to break things until they work.
 
+This series was inspired by [Suresh Vinasiththamby's PacketSwitch blog](https://www.packetswitch.co.uk) — he writes the kind of practical, no-nonsense networking content that actually helps you build things. Go read his stuff.
+
 This first part is about building the foundation: what GNS3 actually does under the hood, how Linux (and macOS, and Windows) handle virtual networking, and the tools you'll use every single day.
 
 ## GNS3 v2.2.59 — The Right Version
@@ -504,3 +506,14 @@ By the time you're done with Part 1, you should be able to:
 This is the foundation. Part 2 will layer VLANs and bonding on top of it, and we'll configure a Juniper switch inside GNS3 to match.
 
 The commands and patterns here work the same whether you're on a ThinkPad in a coffee shop or managing a 48-port top-of-rack switch in a colo. The hardware changes. The fundamentals don't.
+
+## Credits & Further Reading
+
+This series draws heavily from folks who have been doing this far longer than me. If you found this useful, go read their work too:
+
+- **[Suresh Vinasiththamby](https://www.packetswitch.co.uk)** — His blog *PacketSwitch* is a goldmine of practical networking labs, from multicast to BGP to automation. His post on [Network Labs on a Budget](https://www.packetswitch.co.uk/network-labs-on-a-budget/) is what convinced me to write this series. He runs a mini PC based lab with Proxmox and covers everything from Cisco CML to Arista cEOS. Follow him on [YouTube](https://www.youtube.com/@packetswitch_net) and [LinkedIn](https://www.linkedin.com/in/suresh-vina-282545a9/).
+- **[Thomas Davis](mailto:tadavis@lbl.gov), [Jay Vosburgh](https://github.com/fubob), Willy Tarreau, and the kernel bonding team** — The Linux Ethernet Bonding Driver HOWTO (kernel.org) is the definitive reference for all 7 bonding modes. I've been referencing it since kernel 2.4 days and it's still the most accurate source. [Read it here](https://www.kernel.org/doc/html/latest/networking/bonding.html).
+- **[ESnet / fasterdata.es.net](https://fasterdata.es.net/)** — The Energy Sciences Network's performance tuning guides are the gold standard for high-speed networking testing. Their iPerf3 tuning page is what taught me about BDP calculations and zerocopy. Part 2 of this series will reference them heavily.
+- **Juniper Networks Documentation** — The official [JunOS documentation portal](https://www.juniper.net/documentation/) covers interface configuration, aggregated Ethernet (LAG), and VLANs in exhaustive detail. The CLI explorer tool is also worth bookmarking.
+
+Part 2 drops in a few days — VLANs, all 7 bonding modes dissected, and Juniper switch-side config to match. Subscribe via [RSS](https://blog.saneax.in/index.xml) to catch it.
