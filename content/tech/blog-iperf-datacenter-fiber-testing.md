@@ -1,9 +1,17 @@
 ---
-title: "iPerf3, Fiber, and Juniper: Testing Your Datacenter Network Like a Pro"
-description: "A deep dive into datacenter bandwidth testing with iPerf3, fiber troubleshooting, Juniper switch config, and GNS3 simulation"
+title: "Learn Datacenter Networking on Your Laptop — Part 3: iPerf3, Fiber, and Juniper — Testing Like a Pro"
+description: "Datacenter bandwidth testing with iPerf3, fiber optics troubleshooting, Juniper switch diagnostics, and real throughput testing in GNS3"
 slug: "iperf-datacenter-fiber-testing"
 date: "2026-04-19"
-tags: ["iperf3", "networking", "juniper", "fiber", "datacenter", "gns3"]
+tags: ["iperf3", "networking", "juniper", "fiber", "datacenter", "gns3", "tutorial-series"]
+---
+
+**Series: Learn Datacenter Networking on Your Laptop**
+
+- **[Part 1: GNS3 Foundation & Linux Networking Primer](https://blog.saneax.in/tech/learn-datacenter-networking-gns3-part1/)** — Bridges, taps, host networking setup, your first lab
+- **[Part 2: VLANs, Bonding, and Network Segregation](https://blog.saneax.in/tech/learn-datacenter-networking-gns3-part1/)** — *Coming June 24*
+- **Part 3** ← You are here — iPerf3, fiber troubleshooting, Juniper switch diagnostics, throughput testing
+
 ---
 
 I spent last weekend debugging a link between two Juniper switches that was running at 2Gbps on a 10G interface. The fiber was plugged in, the lights were blinking, and both switches happily reported "Link is up." Everything looked fine. Except it wasn't.
